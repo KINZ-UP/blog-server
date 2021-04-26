@@ -25,7 +25,9 @@ db.once("open", () => console.log("Connected to Database"));
 app.use(express.json());
 
 const postsRouter = require("./routes/posts");
+const uploadRouter = require("./routes/upload");
 app.use("/posts", postsRouter);
+app.use("/upload", uploadRouter);
 app.listen(8000, () => {
   console.log("Hello World!");
 });
