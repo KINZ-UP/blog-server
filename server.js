@@ -1,3 +1,9 @@
+process.env.NODE_ENV =
+  process.env.NODE_ENV &&
+  process.env.NODE_ENV.trim().toLowerCase() == "production"
+    ? "production"
+    : "development";
+
 require("dotenv").config();
 
 const express = require("express");
@@ -5,7 +11,10 @@ const cors = require("cors");
 const app = express();
 
 const options = {
-  origin: "http://localhost:3000", // 접근 권한을 부여하는 도메인
+  origin:
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : "https://kinz-up.github.io/", // 접근 권한을 부여하는 도메인
   credentials: true, // 응답 헤더에 Access-Control-Allow-Credentials 추가
   optionsSuccessStatus: 200, // 응답 상태 200으로 설정
 };
@@ -29,5 +38,5 @@ const uploadRouter = require("./routes/upload");
 app.use("/posts", postsRouter);
 app.use("/upload", uploadRouter);
 app.listen(8000, () => {
-  console.log("Hello World!");
+  console.log(process.env.NODE_ENV);
 });
