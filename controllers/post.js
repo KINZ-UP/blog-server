@@ -13,12 +13,12 @@ const post = {
 };
 
 const util = {
-  success: (status, message, data) => {
+  success: (status, message, path) => {
     return {
       status,
       success: true,
       message,
-      data,
+      path,
     };
   },
   fail: (status, message) => {

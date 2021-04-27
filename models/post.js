@@ -17,6 +17,10 @@ const postSchema = new mongoose.Schema({
     ],
     required: false,
   },
+  thumbnail: {
+    type: String,
+    required: false,
+  },
   createdAt: {
     type: Date,
     required: true,

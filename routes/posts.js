@@ -41,6 +41,7 @@ router.post("/", async (req, res) => {
     title: req.body.title,
     body: req.body.body,
     tags: req.body.tags,
+    thumbnail: req.body.thumbnail,
   });
   try {
     const newPost = await post.save();
@@ -68,6 +69,9 @@ router.patch("/:id", getPostById, async (req, res) => {
   }
   if (req.body.tags) {
     res.post.tags = req.body.tags;
+  }
+  if (req.body.thumbnail) {
+    res.post.thumbnail = req.body.thumbnail;
   }
   try {
     const updatedPost = await res.post.save();
