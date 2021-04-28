@@ -1,23 +1,23 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const Post = require("../models/post");
-const sanitizeHtml = require("sanitize-html");
+const Post = require('../models/post');
+const sanitizeHtml = require('sanitize-html');
 
 const removeHtmlAndShorten = (body) => {
   const filtered = sanitizeHtml(body, {
-    allowedTags: ["h1", "h2", "h3", "h4", "h5", "h6"],
+    allowedTags: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
     // disallowedTagsMode: "recursiveEscape",
-  }).replace(/<h[1-6]>.*<\/h[1-6]>/, "");
-  return filtered.length < 200 ? filtered : filtered.slice(0, 200) + "...";
+  }).replace(/<h[1-6]>.*<\/h[1-6]>/, '');
+  return filtered.length < 150 ? filtered : filtered.slice(0, 150) + '...';
 };
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   const offset = +req.query.offset || 0;
   const limit = +req.query.limit || 5;
 
   try {
     const posts = await Post.find()
-      .sort("-createdAt")
+      .sort('-createdAt')
       .skip(offset)
       .limit(limit)
       .exec();
@@ -32,11 +32,11 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", getPostById, async (req, res) => {
+router.get('/:id', getPostById, async (req, res) => {
   return res.send(res.post);
 });
 
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   const post = new Post({
     title: req.body.title,
     body: req.body.body,
@@ -51,16 +51,17 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", getPostById, async (req, res) => {
+router.delete('/:id', getPostById, async (req, res) => {
   try {
     await res.post.remove();
-    res.json({ message: "Deleted post" });
+    res.json({ message: 'Deleted post' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-router.patch("/:id", getPostById, async (req, res) => {
+router.patch('/:id', getPostById, async (req, res) => {
+  console.log(req.body.body);
   if (req.body.title) {
     res.post.title = req.body.title;
   }
@@ -86,7 +87,7 @@ async function getPostById(req, res, next) {
   try {
     post = await Post.findById(req.params.id);
     if (post === null) {
-      return res.status(404).json({ message: "Cannot find subscriber" });
+      return res.status(404).json({ message: 'Cannot find subscriber' });
     }
   } catch (err) {
     return res.status(500).json({ message: err.message });
