@@ -14,9 +14,12 @@ const removeHtmlAndShorten = (body) => {
 router.get('/', async (req, res) => {
   const offset = +req.query.offset || 0;
   const limit = +req.query.limit || 5;
+  const keyword = req.query.keyword;
+  const keyword_regex = new RegExp(keyword, 'i');
 
   try {
     const posts = await Post.find()
+      .where({ title: keyword_regex })
       .sort('-createdAt')
       .skip(offset)
       .limit(limit)
